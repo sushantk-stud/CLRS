@@ -5699,7 +5699,42 @@
 <p><strong>b.</strong> Show that the off-line caching problem exhibits optimal substructure.</p>
 <p><strong>c.</strong> Prove that furthest-in-future produces the minimum possible number of cache misses.</p>
 </blockquote>
-<p>(Removed)</p>
+<p><strong>a.</strong> Suppose there are $m$ distinct elements that could be requested. There may be some room for improvement in terms of keeping track of the furthest in future element at each position. If you maintain a (double circular) linked list with a node for each possible cache element and an array so that in index $i$ there is a pointer corresponding to the node in the linked list corresponding to the possible cache request $i$. Then, starting with the elements in an arbitrary order, process the sequence $\langle r_1, \dots, r_n \rangle$ from right to left. Upon processing a request move the node corresponding to that request to the beginning of the linked list and make a note in some other array of length $n$ of the element at the end of the linked list. This element is tied for furthest-in-future. Then, just scan left to right through the sequence, each time just checking some set for which elements are currently in the cache. It can be done in constant time to check if an element is in the cache or not by a direct address table. If an element need be evicted, evict the furthest-in-future one noted earlier. This algorithm will take time $O(n + m)$ and use additional space $O(m + n)$.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">SCHEDULING</span><span class="o">-</span><span class="n">VARIATIONS</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">let</span> <span class="n">D</span> <span class="n">be</span> <span class="n">an</span> <span class="n">array</span> <span class="n">of</span> <span class="n">size</span> <span class="n">n</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">n</span>
+        <span class="n">a_i</span><span class="p">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">a_i</span><span class="p">.</span><span class="n">deadline</span>
+    <span class="k">if</span> <span class="n">D</span><span class="p">[</span><span class="n">a_i</span><span class="p">.</span><span class="n">deadline</span><span class="p">]</span> <span class="o">!=</span> <span class="n">NIL</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">FIND</span><span class="o">-</span><span class="n">SET</span><span class="p">(</span><span class="n">D</span><span class="p">[</span><span class="n">a_i</span><span class="p">.</span><span class="n">deadline</span><span class="p">])</span>
+        <span class="n">a_i</span><span class="p">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">y</span><span class="p">.</span><span class="n">low</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">MAKE</span><span class="o">-</span><span class="n">SET</span><span class="p">(</span><span class="n">a_i</span><span class="p">)</span>
+    <span class="n">D</span><span class="p">[</span><span class="n">a_i</span><span class="p">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="n">x</span><span class="p">.</span><span class="n">low</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">high</span> <span class="o">=</span> <span class="n">a_i</span><span class="p">.</span><span class="n">time</span>
+    <span class="k">if</span> <span class="n">D</span><span class="p">[</span><span class="n">a_i</span><span class="p">.</span><span class="n">time</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">NIL</span>
+        <span class="n">UNION</span><span class="p">(</span><span class="n">D</span><span class="p">[</span><span class="n">a_i</span><span class="p">.</span><span class="n">time</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">D</span><span class="p">[</span><span class="n">a_i</span><span class="p">.</span><span class="n">time</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">D</span><span class="p">[</span><span class="n">a_i</span><span class="p">.</span><span class="n">time</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">NIL</span>
+        <span class="n">UNION</span><span class="p">(</span><span class="n">D</span><span class="p">[</span><span class="n">a_i</span><span class="p">.</span><span class="n">time</span><span class="p">],</span> <span class="n">D</span><span class="p">[</span><span class="n">a_i</span><span class="p">.</span><span class="n">time</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</td></tr></table>
+
+<p>If we were in the stupid case that $m &gt; n$, we could restrict our attention to the possible cache requests that actually happen, so we have a solution that is $O(n)$ both in time and in additional space required.</p>
+<p><strong>b.</strong> Index the subproblems $c[i, S]$ by a number $i \in [n]$ and a subset $S \in \binom{[m]}{k}$. Which indicates the lowest number of misses that can be achieved with an initial cache of $S$ starting after index $i$. Then,</p>
+<p>$$c[i, S] = \min_{x \in \{S\}} (c[i + 1, \{r_i\} \cup (S − \{x\})] + (1 − \chi_{\{r_i\}}(x))),$$</p>
+<p>which means that $x$ is the element that is removed from the cache unless it is the current element being accessed, in which case there is no cost of eviction.</p>
+<p><strong>c.</strong> At each time we need to add something new, we can pick which entry to evict from the cache. We need to show the there is an exchange property. That is, if we are at round $i$ and need to evict someone, suppose we evict $x$. Then, if we were to instead evict the furthest in future element $y$, we would have no more evictions than before. To see this, since we evicted $x$, we will have to evict someone else once we get to $x$, whereas, if we had used the other strategy, we wouldn't of had to evict anyone until we got to $y$. This is a point later in time than when we had to evict someone to put $x$ back into the cache, so we could, at reloading $y$, just evict the person we would of evicted when we evicted someone to reload $x$. This causes the same number of misses unless there was an access to that element that wold of been evicted at reloading $x$ some point in between when $x$ any $y$ were needed, in which case furthest in future would be better.</p>
                 
                   
                 

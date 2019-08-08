@@ -5740,7 +5740,56 @@ $$</p>
 <p>A $+$ under a position indicates a score of $+1$ for that position, a $-$ indicates a score of $-1$, and a $*$ indicates a score of $-2$, so that this alignment has a total score of $6 \cdot -2 \cdot 1 - 4 \cdot 2 = -4$.</p>
 <p><strong>b.</strong> Explain how to cast the problem of finding an optimal alignment as an edit distance problem using a subset of the transformation operations copy, replace, delete, insert, twiddle, and kill.</p>
 </blockquote>
-<p>(Removed)</p>
+<p><strong>a.</strong> We will index our subproblems by two integers, $1 \le i \le m$ and $1 \le j \le n$. We will let $i$ indicate the rightmost element of $x$ we have not processed and $j$ indicate the rightmost element of $y$ we have not yet found matches for. For a solution, we call $\text{EDIT}(x, y, i, j)$.</p>
+<p><strong>b.</strong> We will set</p>
+<p>$$\text{cost(delete)} = \text{cost(insert)} = 2,$$</p>
+<p>$$\text{cost(copy)} = −1,$$</p>
+<p>$$\text{cost(replace)} = 1,$$</p>
+<p>and</p>
+<p>$$\text{cost(twiddle)} = \text{cost(kill)} = \infty.$$</p>
+<p>Then a minimum cost translation of the first string into the second corresponds to an alignment.</p>
+<p>We view</p>
+<ul>
+<li>a $\text{copy}$ or a $\text{replace}$ as incrementing a pointer for both strings,</li>
+<li>a $\text{insert}$ as putting a space at the current position of the pointer in the first string, and</li>
+<li>a $\text{delete}$ operation means putting a space in the current position in the second string.</li>
+</ul>
+<p>Since $\text{twiddle}$s and $\text{kill}$s have infinite costs, we will have neither of them in a minimal cost solution. The final value for the alignment will be the negative of the minimum cost sequence of edits.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">EDIT</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="n">let</span> <span class="n">m</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">length</span>
+    <span class="n">let</span> <span class="n">n</span> <span class="o">=</span> <span class="n">y</span><span class="p">.</span><span class="n">length</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">m</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span><span class="n">cost</span><span class="p">(</span><span class="n">insert</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">n</span>
+        <span class="k">return</span> <span class="n">min</span><span class="p">{(</span><span class="n">m</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span><span class="n">cost</span><span class="p">(</span><span class="k">delete</span><span class="p">),</span> <span class="n">cost</span><span class="p">(</span><span class="n">kill</span><span class="p">)}</span>
+    <span class="n">initialize</span> <span class="n">o1</span><span class="p">,</span> <span class="p">...,</span> <span class="n">o5</span> <span class="n">to</span> <span class="err">∞</span>
+    <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">o1</span> <span class="o">=</span> <span class="n">cost</span><span class="p">(</span><span class="n">copy</span><span class="p">)</span> <span class="o">+</span> <span class="n">EDIT</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">o2</span> <span class="o">=</span> <span class="n">cost</span><span class="p">(</span><span class="n">replace</span><span class="p">)</span> <span class="o">+</span> <span class="n">EDIT</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">o3</span> <span class="o">=</span> <span class="n">cost</span><span class="p">(</span><span class="k">delete</span><span class="p">)</span> <span class="o">+</span> <span class="n">EDIT</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="n">o4</span> <span class="o">=</span> <span class="n">cost</span><span class="p">(</span><span class="n">insert</span><span class="p">)</span> <span class="o">+</span> <span class="n">EDIT</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="n">and</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="n">and</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">o5</span> <span class="o">=</span> <span class="n">cost</span><span class="p">(</span><span class="n">twiddle</span><span class="p">)</span> <span class="o">+</span> <span class="n">EDIT</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">min_</span><span class="p">{</span><span class="n">i</span> <span class="err">∈</span> <span class="p">[</span><span class="mi">5</span><span class="p">]}{</span><span class="n">o_i</span><span class="p">}</span>
+</pre></div>
+</td></tr></table>
                 
                   
                 

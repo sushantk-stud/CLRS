@@ -5704,7 +5704,61 @@
 <p><strong>d.</strong> Show how to implement $\text{GRAFT}(r, v)$, which combines the sets containing $r$ and $v$, by modifying the $\text{UNION}$ and $\text{LINK}$ procedures. Make sure that your implementation updates pseudodistances correctly. Note that the root of a set $S_i$ is not necessarily the root of the corresponding tree $T_i$.</p>
 <p><strong>e.</strong> Give a tight bound on the worst-case running time of a sequence of $m$ $\text{MAKE-TREE}$, $\text{FIND-DEPTH}$, and $\text{GRAFT}$ operations, $n$ of which are $\text{MAKE-TREE}$ operations.</p>
 </blockquote>
-<p>(Removed)</p>
+<p><strong>a.</strong> $\text{MAKE-TREE}$ and $\text{GRAFT}$ are both constant time operations. $\text{FINDDEPTH}$ is linear in the depth of the node. In a sequence of $m$ operations the maximal depth which can be achieved is $m/2$, so $\text{FIND-DEPTH}$ takes at most $O(m)$. Thus, $m$ operations take at most $O(m^2)$. This is achieved as follows: Create $m / 3$ new trees. Graft them together into a chain using $m / 3$ calls to $\text{GRAFT}$. Now call $\text{FIND-DEPTH}$ on the deepest node $m / 3$ times. Each call takes time at least $m / 3$, so the total runtime is $\Omega((m / 3)^2) = \Omega(m^2)$. Thus the worst-case runtime of the $m$ operations is $\Theta(m^2)$.</p>
+<p><strong>b.</strong> Since the new set will contain only a single node, its depth must be zero and its parent is itself. In this case, the set and its corresponding tree are indistinguishable.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">MAKE</span><span class="o">-</span><span class="n">TREE</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">ALLOCATE</span><span class="o">-</span><span class="n">NODE</span><span class="p">()</span>
+    <span class="n">v</span><span class="p">.</span><span class="n">d</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">v</span><span class="p">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="k">return</span> <span class="n">v</span>
+</pre></div>
+</td></tr></table>
+
+<p><strong>c.</strong> In addition to returning the set object, modify $\text{FIND-SET}$ to also return the depth of the parent node. Update the pseudodistance of the current node $v$ to be $v.d$ plus the returned pseudodistance. Since this is done recursively, the running time is unchanged. It is still linear in the length of the find path. To implement $\text{FIND-DEPTH}$, simply recurse up the tree containing $v$, keeping a running total of pseudodistances.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">FIND</span><span class="o">-</span><span class="n">SET</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">v</span><span class="p">.</span><span class="n">p</span>
+        <span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">FIND</span><span class="o">-</span><span class="n">SET</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">d</span> <span class="o">+</span> <span class="n">d</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">p</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</td></tr></table>
+
+<p><strong>d.</strong> To implement $\text{GRAFT}$ we need to find $v$'s actual depth and add it to the pseudodistance of the root of the tree $S_i$ which contains $r$.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">GRAFT</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d_1</span><span class="p">)</span> <span class="o">=</span> <span class="n">FIND</span><span class="o">-</span><span class="n">SET</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">d_2</span><span class="p">)</span> <span class="o">=</span> <span class="n">FIND</span><span class="o">-</span><span class="n">SET</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span><span class="p">.</span><span class="n">rank</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">.</span><span class="n">rank</span>
+        <span class="n">y</span><span class="p">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">d</span> <span class="o">+</span> <span class="n">d_2</span> <span class="o">+</span> <span class="n">y</span><span class="p">.</span><span class="n">d</span>
+    <span class="k">else</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">d</span> <span class="o">+</span> <span class="n">d_2</span>
+        <span class="k">if</span> <span class="n">x</span><span class="p">.</span><span class="n">rank</span> <span class="o">==</span> <span class="n">y</span><span class="p">.</span><span class="n">rank</span>
+            <span class="n">y</span><span class="p">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">y</span><span class="p">.</span><span class="n">rank</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</td></tr></table>
+
+<p><strong>e.</strong> The three implemented operations have the same asymptotic running time as $\text{MAKE}$, $\text{FIND}$, and $\text{UNION}$ for disjoint sets, so the worst-case runtime of $m$ such operations, $n$ of which are $\text{MAKE-TREE}$ operations, is $O(m\alpha(n))$.</p>
                 
                   
                 

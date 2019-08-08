@@ -5709,7 +5709,38 @@
 <p>and that $\hat\delta_i(s, v) \le |E|$.</p>
 <p><strong>f.</strong> Show how to compute $\delta_i(s, v)$ from $\delta_{i - 1}(s, v)$ for all $v \in V$ in $O(E)$ time, and conclude that we can compute $\delta(s, v)$ for all $v \in V$ in $O(E\lg W)$ time.</p>
 </blockquote>
-<p>(Removed)</p>
+<p><strong>a.</strong> We can do this in $O(E)$ by the algorithm described in exercise 24.3-8 since our "priority queue" takes on only integer values and is bounded in size by $E$.</p>
+<p><strong>b.</strong> We can do this in $O(E)$ by the algorithm described in exercise 24.3-8 since $w$ takes values in $\{0, 1\}$ and $V = O(E)$.</p>
+<p><strong>c.</strong> If the $i$th digit, read from left to right, of $w(u, v)$ is $0$, then $w_i(u, v) = 2w_{i − 1}(u, v)$. If it is a $1$, then $w_i(u, v) = 2w_{i − 1}(u, v) + 1$. Now let $s = v_0, v_1, \dots, v_n = v$ be a shortest path from $s$ to $v$ under $w_i$. Note that any shortest path under $w_i$ is necessarily also a shortest path under $w_{i − 1}$. Then we have</p>
+<p>$$
+\begin{aligned}
+\delta_i(s, v)
+    &amp; =   \sum_{m = 1}^n w_i(v_{m − 1}, v_m) \\
+    &amp; \le \sum_{m = 1}^n [2w_{i − 1}(u, v) + 1] \\
+    &amp; \le \sum_{m = 1}^n w_{i − 1}(u, v) + n \\
+    &amp; \le 2\delta_{i − 1}(s, v) + |V| − 1.
+\end{aligned}
+$$</p>
+<p>On the other hand, we also have</p>
+<p>$$
+\begin{aligned}
+\delta_i(s, v)
+    &amp; =   \sum_{m = 1}^n w_i(v_{m - 1}, v_m) \\
+    &amp; \ge \sum_{m = 1}^n 2w_{i - 1}(v_{m - 1}, v_m) \\
+    &amp; \ge 2\delta_{i - 1}(s, v).
+\end{aligned}
+$$</p>
+<p><strong>d.</strong> Note that every quantity in the definition of $\hat w_i$ is an integer, so $\hat w_i$ is clearly an integer. Since $w_i(u, v) \ge 2w_{i - 1}(u, v)$, it will suffice to show that $w_{i - 1}(u, v) + \delta_{i - 1}(s, u) \ge \delta_{i - 1}(s, v)$ to prove nonnegativity. This follows immediately from the triangle inequality.</p>
+<p><strong>e.</strong> First note that $s = v_0, v_1, \dots, v_n = v$ is a shortest path from $s$ to $v$ with respect to $\hatw$ if and only if it is a shortest path with respect to $w$. Then we have</p>
+<p>$$
+\begin{aligned}
+\hat\delta_i(s, v)
+    &amp; = \sum_{m = 1}^n w_i(v_{m - 1}, v_m) + 2\delta_{i - 1}(s, v_{m - 1}) − 2\delta_{i - 1}(s, v_m) \\
+    &amp; = \sum_{m = 1}^n w_i(v_{m - 1}, v_m) − 2\delta_{i - 1}(s, v_n) \\
+    &amp; = \delta_i(s, v) − 2\delta_{i - 1}(s, v). 
+\end{aligned}
+$$</p>
+<p><strong>f.</strong> By part (a) we can compute $\hat\delta_i(s, v)$ for all $v \in V$ in $O(E)$ time. If we have already computed $\delta_i - 1$ then we can compute $\delta_i$ in $O(E)$ time. Since we can compute $\delta_1$ in $O(E)$ by part b, we can compute $\delta_i$ from scratch in $O(iE)$ time. Thus, we can compute $\delta = \delta_k$ in $O(Ek) = O(E\lg W)$ time.</p>
                 
                   
                 

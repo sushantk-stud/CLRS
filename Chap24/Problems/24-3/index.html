@@ -5699,7 +5699,15 @@
 <p>Analyze the running time of your algorithm.</p>
 <p><strong>b.</strong> Give an efficient algorithm to print out such a sequence if one exists. Analyze the running time of your algorithm.</p>
 </blockquote>
-<p>(Removed)</p>
+<p><strong>a.</strong> To do this we take the negative of the natural log (or any other base will also work) of all the values $c_i$ that are on the edges between the currencies. Then, we detect the presence or absence of a negative weight cycle by applying Bellman Ford. To see that the existence of an arbitrage situation is equivalent to there being a negative weight cycle in the original graph, consider the following sequence of steps:</p>
+<p>$$
+\begin{aligned}
+R[i_1, i_2] · R[i_2, i_3] \cdot \cdots \cdot R[i_k, i_1] &amp; &gt; 1 \\
+\ln(R[i_1, i_2]) + \ln(R[i_2, i_3]) + \cdots + \ln(R[i_k, i_1]) &amp; &gt; 0 \\
+−\ln(R[i_1, i_2]) − \ln(R[i_2, i_3]) − \cdots − \ln(R[i_k, i_1]) &amp; &lt; 0.
+\end{aligned}
+$$</p>
+<p><strong>b.</strong> To do this, we first perform the same modification of all the edge weights as done in part (a) of this problem. Then, we wish to detect the negative weight cycle. To do this, we relax all the edges $|V| − 1$ many times, as in BellmanFord algorithm. Then, we record all of the $d$ values of the vertices. Then, we relax all the edges $|V|$ more times. Then, we check to see which vertices had their $d$ value decrease since we recorded them. All of these vertices must lie on some (possibly disjoint) set of negative weight cycles. Call $S$ this set of vertices. To find one of these cycles in particular, we can pick any vertex in $S$ and greedily keep picking any vertex that it has an edge to that is also in $S$. Then, we just keep an eye out for a repeat. This finds us our cycle. We know that we will never get to a dead end in this process because the set $S$ consists of vertices that are in some union of cycles, and so every vertex has out degree at least $1$.</p>
                 
                   
                 

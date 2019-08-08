@@ -5730,7 +5730,29 @@
 <p><strong>b.</strong> Suppose that we set $grain\text -size = 1$. What is the parallelism of this implementation?</p>
 <p><strong>c.</strong> Give a formula for the span of $\text{SUM-ARRAYS}'$ in terms of $n$ and $grain\text-size$. Derive the best value for grain-size to maximize parallelism.</p>
 </blockquote>
-<p>(Removed)</p>
+<p><strong>a.</strong> See the algorithm $\text{SUM-ARRAYS}(A, B, C)$. The parallelism is $O(n)$ since it's work is $n\lg n$ and the span is $\lg n$.</p>
+<p><strong>b.</strong> If grainsize is $1$, this means that each call of $\text{ADD-SUBARRAY}$ just sums a single pair of numbers. This means that since the for loop on line 4 will run $n$ times, both the span and work will be $O(n)$. So, the parallelism is just $O(1)$.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">SUM</span><span class="o">-</span><span class="n">ARRAYS</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">C</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span>
+        <span class="n">spawn</span> <span class="n">SUM</span><span class="o">-</span><span class="n">ARRAYS</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="mf">1.</span><span class="p">.</span><span class="n">n</span><span class="p">],</span> <span class="n">B</span><span class="p">[</span><span class="mf">1.</span><span class="p">.</span><span class="n">n</span><span class="p">],</span> <span class="n">C</span><span class="p">[</span><span class="mf">1.</span><span class="p">.</span><span class="n">n</span><span class="p">])</span>
+        <span class="n">SUM</span><span class="o">-</span><span class="n">ARRAYS</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">.</span><span class="n">A</span><span class="p">.</span><span class="n">length</span><span class="p">],</span> <span class="n">B</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">.</span><span class="n">A</span><span class="p">..</span><span class="n">length</span><span class="p">],</span> <span class="n">C</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">.</span><span class="n">A</span><span class="p">.</span><span class="n">length</span><span class="p">])</span>
+</pre></div>
+</td></tr></table>
+
+<p><strong>c.</strong> Let $g$ be the grainsize. The runtime of the function that spawns all the other functions is $\left\lceil \frac{n}{g} \right\rceil$. The runtime of any particular spawned task is $g$. So, we want to minimize</p>
+<p>$$\frac{n}{g} + g.$$</p>
+<p>To do this we pull out our freshman calculus hat and take a derivative, we have</p>
+<p>$$0 = 1 − \frac{n}{g^2}.$$</p>
+<p>To solve this, we set $g = \sqrt n$. This minimizes the quantity and makes the span $O(n / g + g) = O(\sqrt n)$. Resulting in a parallelism of $O(\sqrt n)$.</p>
                 
                   
                 
