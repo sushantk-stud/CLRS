@@ -6050,20 +6050,20 @@ T(n) &amp; = \sum_{i = 0}^{\lg n - 1} 2^icn + \Theta(n^2) \\
 $$</p>
 </li>
 <li>
-<p>For $O(n^2)$, we guess $T(n) \le cn^2 + 2cn$,</p>
+<p>For $O(n^2)$, we guess $T(n) \le dn^2 - cn$,</p>
 <p>$$
 \begin{aligned}
-T(n) &amp; \le 4c(n / 2)^2 + 2c(n / 2) + cn \\
-     &amp; =   cn^2 + 2cn.
+T(n) &amp; \le 4d(n / 2)^2 - 4c(n / 2) + cn \\
+     &amp; =   dn^2 - cn.
 \end{aligned}
 $$</p>
 </li>
 <li>
-<p>For $\Omega(n^2)$, we guess $T(n) \ge cn^2 + 2cn$,</p>
+<p>For $\Omega(n^2)$, we guess $T(n) \ge dn^2 - cn$,</p>
 <p>$$
 \begin{aligned}
-T(n) &amp; \ge 4c(n / 2)^2 + 2c(n / 2) + cn \\
-     &amp; =   cn^2 + 2cn.
+T(n) &amp; \ge 4d(n / 2)^2 - 4c(n / 2) + cn \\
+     &amp; =   dn^2 - cn.
 \end{aligned}
 $$</p>
 </li>
