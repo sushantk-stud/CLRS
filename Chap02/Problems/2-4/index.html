@@ -5700,7 +5700,7 @@
 </blockquote>
 <p><strong>a.</strong> $(1, 5)$, $(2, 5)$, $(3, 4)$, $(3, 5)$, $(4, 5)$.</p>
 <p><strong>b.</strong> The array $\langle n, n - 1, \dots, 1 \rangle$ has the most inversions $(n - 1) + (n - 2) + \cdots + 1 = n(n - 1) / 2$.</p>
-<p><strong>c.</strong> The running time of insertion sort is a constant times the number of inversions. Let $I(i)$ denote the number of $j &lt; i$ such that $A[j] &gt; A[i]$. Then $\sum_{n = 1}^n I(i)$ equals the number of inversions in $A$.</p>
+<p><strong>c.</strong> The running time of insertion sort is a constant times the number of inversions. Let $I(i)$ denote the number of $j &lt; i$ such that $A[j] &gt; A[i]$. Then $\sum_{i = 1}^n I(i)$ equals the number of inversions in $A$.</p>
 <p>Now consider the <strong>while</strong> loop on lines 5-7 of the insertion sort algorithm. The loop will execute once for each element of $A$ which has index less than $j$ is larger than $A[j]$. Thus,
 it will execute $I(j)$ times. We reach this <strong>while</strong> loop once for each iteration
 of the <strong>for</strong> loop, so the number of constant time steps of insertion sort is $\sum_{j = 1}^n I(j)$ which is exactly the inversion number of $A$.</p>
@@ -5752,7 +5752,7 @@ of the <strong>for</strong> loop, so the number of constant time steps of insert
     <span class="k">for</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">n2</span>
         <span class="n">R</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">q</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span>
     <span class="n">L</span><span class="p">[</span><span class="n">n1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="err">∞</span>
-    <span class="n">L</span><span class="p">[</span><span class="n">n2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="err">∞</span>
+    <span class="n">R</span><span class="p">[</span><span class="n">n2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="err">∞</span>
     <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">inversions</span> <span class="o">=</span> <span class="mi">0</span>
