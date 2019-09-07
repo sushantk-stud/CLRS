@@ -5877,18 +5877,22 @@ $$</p>
 </blockquote>
 <p>Expand $(n + a)^b$ by the Binomial Expansion, we have</p>
 <p>$$(n + a)^b = C_0^b n^b a^0 + C_1^b n^{b - 1} a^1 + \cdots + C_b^b n^0 a^b.$$</p>
-<p>Besides, we know below is true for any polynomial</p>
-<p>$$a_0 x^1 + a_1 x^2 + \cdots + a_n x^n \le (a_0 + a_1 + \cdots + a_n) x^n.$$</p>
+<p>Besides, we know below is true for any polynomial when $x \ge 1$.</p>
+<p>$$a_0 x^0 + a_1 x^1 + \cdots + a_n x^n \le (a_0 + a_1 + \cdots + a_n) x^n.$$</p>
 <p>Thus,</p>
-<p>$$C_0^b n^b \le C_0^b n^b a^0 + C_1^b n^{b - 1} a^1 + \cdots + C_n^n n^0 a^n \le (C_0^b + C_1^b + \cdots + C_b^b) n^b.$$</p>
+<p>$$C_0^b n^b \le C_0^b n^b a^0 + C_1^b n^{b - 1} a^1 + \cdots + C_b^b n^0 a^b \le (C_0^b + C_1^b + \cdots + C_b^b) n^b = 2^b n^b.$$</p>
 <p>$$\implies (n + a)^b = \Theta(n^b).$$</p>
 <h2 id="31-3">3.1-3</h2>
 <blockquote>
 <p>Explain why the statement, "The running time of algorithm $A$ is at least $O(n^2)$," is meaningless.</p>
 </blockquote>
-<p>Let $T(n)$ be the running time for algorithm <strong>A</strong> and function $f(n) = O(n^2)$. The
-statement "The running time for algorithm <strong>A</strong> is at least $O(n^2)$" means that $T(n)$ is an upper bound of $f(n)$.</p>
-<p>Since $f(n)$ could be any function smaller than $n^2$ (including constant function), we can rephase the statement as "The running time of algorithm <strong>A</strong> is at least constant." Back to the problem, the statement is meaningless because the running time for every algorithm is at least constant.</p>
+<p>$T(n)$: running time of algorithm $A$. We just care about the upper bound and the lower bound of $T(n)$.</p>
+<p>The statement: $T(n)$ is at least $O(n^2)$.</p>
+<ul>
+<li>Upper bound: Because "$T(n)$ is at least $O(n^2)$", there's no information about the upper bound of $T(n)$.</li>
+<li>Lower bound: Assume $f(n) = O(n^2)$, then the statement: $T(n) \ge f(n)$, but $f(n)$ could be any fuction that is "smaller" than $n^2$. For example, constant, $n$, etc, so there's no conclusion about the lower bound of $T(n)$, too.</li>
+</ul>
+<p>Therefore, the statement, "The running time of algorithm $A$ is at least $O(n^2)$," is meaningless.</p>
 <h2 id="31-4">3.1-4</h2>
 <blockquote>
 <p>Is $2^{n + 1} = O(2^n)$? Is $2^{2n} = O(2^n)$?</p>
@@ -5940,15 +5944,16 @@ $$</p>
 <blockquote>
 <p>Prove $o(g(n)) \cap w(g(n))$ is the empty set.</p>
 </blockquote>
-<p>We know that for any $c &gt; 0$,</p>
+<p>Let $f(n) in o(g(n)) \cap w(g(n))$.
+We know that for any $c_1 &gt; 0$, $c_1 &gt; 0$,</p>
 <p>$$
 \begin{aligned}
-            &amp; \exists n_1 &gt; 0: 0 \le f(n) &lt; cg(n) \\
-\text{and } &amp; \exists n_2 &gt; 0: 0 \le cg(n) &lt; f(n).
+            &amp; \exists n_1 &gt; 0: 0 \le f(n) &lt; c_1g(n) \\
+\text{and } &amp; \exists n_2 &gt; 0: 0 \le c_2g(n) &lt; f(n).
 \end{aligned}
 $$</p>
-<p>If we pick $n_0 = \max(n_1, n_2)$, from the problem definition we get</p>
-<p>$$f(n) &lt; cg(n) &lt; f(n).$$</p>
+<p>If we pick $n_0 = \max(n_1, n_2)$, and let $c_1 = c_2$, from the problem definition we get</p>
+<p>$$c_1g(n) &lt; f(n) &lt; c_1g(n).$$</p>
 <p>There is no solutions, which means that the intersection is the empty set.</p>
 <h2 id="31-8">3.1-8</h2>
 <blockquote>
