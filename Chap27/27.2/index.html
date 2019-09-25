@@ -5843,7 +5843,40 @@
 <blockquote>
 <p>Give pseudocode for an efficient multithreaded algorithm that transposes an $n \times n$ matrix in place by using divide-and-conquer to divide the matrix recursively into four $n / 2 \times n / 2$ submatrices. Analyze your algorithm.</p>
 </blockquote>
-<p>(Removed)</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">P</span><span class="o">-</span><span class="n">MATRIX</span><span class="o">-</span><span class="n">TRANSPOSE</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">rows</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">return</span>
+    <span class="n">partition</span> <span class="n">A</span> <span class="n">into</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span> <span class="err">✕</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span> <span class="n">submatrices</span> <span class="n">A11</span><span class="p">,</span> <span class="n">A12</span><span class="p">,</span> <span class="n">A21</span><span class="p">,</span> <span class="n">A22</span>
+    <span class="n">spawn</span> <span class="n">P</span><span class="o">-</span><span class="n">MATRIX</span><span class="o">-</span><span class="n">TRANSPOSE</span><span class="p">(</span><span class="n">A11</span><span class="p">)</span>
+    <span class="n">spawn</span> <span class="n">P</span><span class="o">-</span><span class="n">MATRIX</span><span class="o">-</span><span class="n">TRANSPOSE</span><span class="p">(</span><span class="n">A12</span><span class="p">)</span>
+    <span class="n">spawn</span> <span class="n">P</span><span class="o">-</span><span class="n">MATRIX</span><span class="o">-</span><span class="n">TRANSPOSE</span><span class="p">(</span><span class="n">A21</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">-</span><span class="n">MATRIX</span><span class="o">-</span><span class="n">TRANSPOSE</span><span class="p">(</span><span class="n">A22</span><span class="p">)</span>
+    <span class="n">sync</span>
+    <span class="c1">// exchange A12 with A21</span>
+    <span class="n">parallel</span> <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">parallel</span> <span class="k">for</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span> <span class="n">to</span> <span class="n">n</span>
+            <span class="n">exchange</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="n">with</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</td></tr></table>
+
+<ul>
+<li>span: $T(n) = T(n / 2) + O(\lg n) = O(\lg^2 n)$.</li>
+<li>work: $T(n) = 4T(n / 2) + O(n^2) = O(n^2\lg n)$.</li>
+</ul>
 <h2 id="272-6">27.2-6</h2>
 <blockquote>
 <p>Give pseudocode for an efficient multithreaded implementation of the Floyd-Warshall algorithm (see Section 25.2), which computes shortest paths between all pairs of vertices in an edge-weighted graph. Analyze your algorithm.</p>

@@ -5875,10 +5875,11 @@ a^{\log_b c} = a^\frac{\log_a c}{\log_a b} = (a^{\log_a c})^{\frac{1}{\log_a b}}
 $$</p>
 <h2 id="32-3">3.2-3</h2>
 <blockquote>
-<p>Prove equation $\text{(3.19)}$. Also prove that $n \ne \omega(2^n)$ and $n \ne o(n^n)$.</p>
+<p>Prove equation $\text{(3.19)}$. Also prove that $n! \ne \omega(2^n)$ and $n! \ne o(n^n)$.</p>
 <p>$$\lg(n!) = \Theta(n\lg n) \tag{3.19}$$</p>
 </blockquote>
-<p>We use <strong>Stirling's approximation:</strong></p>
+<p>We can use <strong>Stirling's approximation</strong> to prove these three equations.</p>
+<p>For equation $\text{(3.19)}$,</p>
 <p>$$
 \begin{aligned}
 \lg(n!)
@@ -5889,10 +5890,29 @@ $$</p>
   &amp; = \Theta(n\lg n).
 \end{aligned}
 $$</p>
-<p>The other two are</p>
-<p>$$\forall n &gt; 3: 2^n = \underbrace{2 \cdot 2 \cdot \cdots \cdot 2}_\text{n times} &lt; 1 \cdot 2 \cdot \cdots \cdot n = n! \quad \Rightarrow \quad n! = \omega(2^n).$$</p>
-<p>and</p>
-<p>$$\forall n &gt; 1 : n! = 1 \cdot 2 \cdot \cdots n &lt; \underbrace{n \cdot n \cdot \cdots \cdot n}_\text{n times} = n^n \quad \Rightarrow \quad n! = o(n^n).$$</p>
+<p>For $n! \ne \omega(2^n)$,</p>
+<p>$$
+\begin{aligned}
+\lim_{n \to \infty} \frac{2^n}{n!}
+  &amp; =   \lim_{n \to \infty} \frac{2^n}{\sqrt{2\pi n} \left(\frac{n}{e}\right)^n \left(1 + \Theta\left(\frac{1}{n}\right)\right)} \\
+  &amp; =   \lim_{n \to \infty} \frac{1}{\sqrt{2\pi n} \left(1 + \Theta\left(\frac{1}{n}\right)\right)} \left(\frac{2e}{n}\right)^n \\
+  &amp; \le \lim_{n \to \infty} \left(\frac{2e}{n}\right)^n \\
+  &amp; \le \lim_{n \to \infty} \frac{1}{2^n} = 0,
+\end{aligned}
+$$</p>
+<p>where the last step holds for $n &gt; 4e$.</p>
+<p>For $n! \ne o(n^n)$,</p>
+<p>$$
+\begin{aligned}
+\lim_{n \to \infty} \frac{n^n}{n!}
+  &amp; =   \lim_{n \to \infty} \frac{n^n}{\sqrt{2\pi n} \left(\frac{n}{e}\right)^n \left(1 + \Theta\left(\frac{1}{n}\right)\right)} \\
+  &amp; =   \lim_{n \to \infty} \frac{e^n}{\sqrt{2\pi n} \left(1 + \Theta\left(\frac{1}{n}\right)\right)} \\
+  &amp; =   \lim_{n \to \infty} O(\frac{1}{\sqrt n})e^n \\
+  &amp; \ge \lim_{n \to \infty} \frac{e^n}{c\sqrt n} &amp; \text{(for some constant $c &gt; 0$)}\\
+  &amp; \ge \lim_{n \to \infty} \frac{e^n}{cn} \\
+  &amp; =   \lim_{n \to \infty} \frac{e^n}{c} = \infty.
+\end{aligned}
+$$</p>
 <h2 id="32-4-star">3.2-4 $\star$</h2>
 <blockquote>
 <p>Is the function $\lceil \lg n \rceil!$ polynomially bounded? Is the function $\lceil \lg\lg n \rceil!$ polynomially bounded?</p>
