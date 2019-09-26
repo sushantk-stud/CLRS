@@ -5781,12 +5781,51 @@
 <blockquote>
 <p>Suppose we perform a sequence of stack operations on a stack whose size never exceeds $k$. After every $k$ operations, we make a copy of the entire stack for backup purposes. Show that the cost of $n$ stack operations, including copying the stack, is $O(n)$ by assigning suitable amortized costs to the various stack operations.</p>
 </blockquote>
-<p>(Removed)</p>
+<p>For every stack operation, we charge twice.</p>
+<ul>
+<li>First, we charge the actual cost of the stack operation.</li>
+<li>Second, we charge the cost of copying an element later on.</li>
+</ul>
+<p>Since we have the size of the stack never exceed $k$, and there are always $k$ operations between backups, we always overpay by at least enough. Therefore, the amortized cost of the operation is constant, and the cost of the $n$ operation is $O(n)$.</p>
 <h2 id="172-2">17.2-2</h2>
 <blockquote>
 <p>Redo Exercise 17.1-3 using an accounting method of analysis.</p>
 </blockquote>
-<p>(Removed)</p>
+<p>Let $c_i =$ csot of $i$th operation.</p>
+<p>$$
+c_i =
+\begin{cases}
+i &amp; \text{if $i$ is an exact power of $2$}, \\
+1 &amp; \text{otherwise}.
+\end{cases}
+$$</p>
+<p>Charge each operation $3$ (amotized cost $\hat c_i$).</p>
+<ul>
+<li>If $i$ is not an exact power of $2$, pay $\$1$, and store $\$2$ as credit.</li>
+<li>If $i$ is an exact power of $2$, pay $\$i$, using stored credit.</li>
+</ul>
+<p>$$
+\begin{array}{cccc}
+\text{Operation} &amp; \text{Cost} &amp; \text{Actual cost} &amp; \text{Credit remaining} \\
+\hline
+ 1 &amp; 3 &amp; 1 &amp;  2 \\
+ 2 &amp; 3 &amp; 2 &amp;  3 \\
+ 3 &amp; 3 &amp; 1 &amp;  5 \\
+ 4 &amp; 3 &amp; 4 &amp;  4 \\
+ 5 &amp; 3 &amp; 1 &amp;  6 \\
+ 6 &amp; 3 &amp; 1 &amp;  8 \\
+ 7 &amp; 3 &amp; 1 &amp; 10 \\
+ 8 &amp; 3 &amp; 8 &amp;  5 \\
+ 9 &amp; 3 &amp; 1 &amp;  7 \\
+10 &amp; 3 &amp; 1 &amp;  9 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots
+\end{array}
+$$</p>
+<p>Since the amortized cost is $\$3$ per operation, $\sum\limits_{i = 1}^n \hat c_i = 3n$.</p>
+<p>We know from Exercise 17.1-3 that $\sum\limits_{i = 1}^n \hat c_i &lt; 3n$.</p>
+<p>Then we have</p>
+<p>$$\sum_{i = 1}^n \hat c_i \ge \sum_{i = 1}^n c_i \Rightarrow \text{credit} = \text{amortized cose} - \text{actual cost} \ge 0.$$</p>
+<p>Since the amortized cost of each operation is $O(1)$, and the amount of credit never goes negative, the total cost of $n$ operations is $O(n)$.</p>
 <h2 id="172-3">17.2-3</h2>
 <blockquote>
 <p>Suppose we wish not only to increment a counter but also to reset it to zero (i.e., make all bits in it $0$). Counting the time to examine or modify a bit as $\Theta(1)$, show how to implement a counter as an array of bits so that any sequence of $n$ $\text{INCREMENT}$ and $\text{RESET}$ operations takes time $O(n)$ on an initially zero counter. ($\textit{Hint:}$ Keep a pointer to the high-order $1$.)</p>

@@ -5791,7 +5791,18 @@
 <blockquote>
 <p>Suppose we perform a sequence of $n$ operations on a data structure in which the $i$th operation costs $i$ if $i$ is an exact power of $2$, and $1$ otherwise. Use aggregate analysis to determine the amortized cost per operation.</p>
 </blockquote>
-<p>(Removed)</p>
+<p>Let $n$ be arbitrary, and have the cost of operation $i$ be $c(i)$. Then we have,</p>
+<p>$$
+\begin{aligned}
+\sum_{i = 1}^n c(i)
+  &amp; =   \sum_{i = 1}^{\left\lceil\lg n\right\rceil} 2^i + \sum_{i \le n \text{ is not a power of } 2} 1 \\
+  &amp; \le \sum_{i = 1}^{\left\lceil\lg n\right\rceil} 2^i + n \\
+  &amp; =   2^{1 + \left\lceil\lg n\right\rceil} - 1 + n \\
+  &amp; \le 4n - 1 + n \\
+  &amp; \le 5n \in O(n).
+\end{aligned}
+$$</p>
+<p>To find the average, we divide by $n$, and the amortized cost per operation is $O(1)$.</p>
                 
                   
                 

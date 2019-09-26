@@ -5938,7 +5938,7 @@
 <blockquote>
 <p>Adapt the aggregate proof of Theorem 21.1 to obtain amortized time bounds of $O(1)$ for $\text{MAKE-SET}$ and $\text{FIND-SET}$ and $O(\lg n)$ for $\text{UNION}$ using the linked-list representation and the weighted-union heuristic.</p>
 </blockquote>
-<p>(Removed)</p>
+<p>During the proof of theorem 21.1, we concluded that the time for the $n$ $\text{UNION}$ operations to run was at most $O(n \lg n)$. This means that each of them took an amortized time of at most $O(\lg n)$. Also, since there is only a constant actual amount of work in performing $\text{MAKE-SET}$ and $\text{FIND-SET}$ operations, and none of that ease is used to offset costs of $\text{UNION}$ operations, they both have $O(1)$ runtime.</p>
 <h2 id="212-4">21.2-4</h2>
 <blockquote>
 <p>Give a tight asymptotic bound on the running time of the sequence of operations in Figure 21.3 assuming the linked-list representation and the weighted-union heuristic.</p>
@@ -5948,12 +5948,12 @@
 <blockquote>
 <p>Professor Gompers suspects that it might be possible to keep just one pointer in each set object, rather than two ($head$ and $tail$), while keeping the number of pointers in each list element at two. Show that the professor's suspicion is well founded by describing how to represent each set by a linked list such that each operation has the same running time as the operations described in this section. Describe also how the operations work. Your scheme should allow for the weighted-union heuristic, with the same effect as described in this section. ($\textit{Hint:}$ Use the tail of a linked list as its set's representative.)</p>
 </blockquote>
-<p>(Removed)</p>
+<p>For each member of the set, we will make its first field which used to point back to the set object point instead to the last element of the linked list. Then, given any set, we can find its last element by going ot the head and following the pointer that that object maintains to the last element of the linked list. This only requires following exactly two pointers, so it takes a constant amount of time. Some care must be taken when unioning these modified sets. Since the set representative is the last element in the set, when we combine two linked lists, we place the smaller of the two sets before the larger, since we need to update their set representative pointers, unlike the original situation, where we update the representative of the objects that are placed on to the end of the linked list.</p>
 <h2 id="212-6">21.2-6</h2>
 <blockquote>
 <p>Suggest a simple change to the $\text{UNION}$ procedure for the linked-list representation that removes the need to keep the $tail$ pointer to the last object in each list. Whether or not the weighted-union heuristic is used, your change should not change the asymptotic running time of the $\text{UNION}$ procedure. ($\textit{Hint:}$ Rather than appending one list to another, splice them together.)</p>
 </blockquote>
-<p>(Removed)</p>
+<p>Instead of appending the second list to the end of the first, we can imagine splicing it into the first list, in between the head and the elements. Store a pointer to the first element in $S_1$. Then for each element $x$ in $S_2$, set $x.head = S_1.head$. When the last element of $S_2$ is reached, set its next pointer to the first element of $S_1$. If we always let $S_2$ play the role of the smaller set, this works well with the weighted-union heuristic and don't affect the asymptotic running time of $\text{UNION}$.</p>
                 
                   
                 
