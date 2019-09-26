@@ -5899,7 +5899,10 @@ $$</p>
 <blockquote>
 <p>Argue that in a breadth-first search, the value $u.d$ assigned to a vertex $u$ is independent of the order in which the vertices appear in each adjacency list. Using Figure 22.3 as an example, show that the breadth-first tree computed by $\text{BFS}$ can depend on the ordering within adjacency lists.</p>
 </blockquote>
-<p>(Removed)</p>
+<p>First, we will show that the value $d$ assigned to a vertex is independent of the order that entries appear in adjacency lists. To do this, we rely on theorem 22.5, which proves correctness of BFS. In particular, that we have $v.d = \delta(s, v)$ at the end of the procedure. Since $\delta(s, v)$ is a property of the underlying graph, no matter which representation of the graph in terms of adjacency lists that we choose, this value will not change. Since the $d$ values are equal to this thing that doesn't change when we mess with the adjacency lists, it too doesn't change when we mess with the adjacency lists.</p>
+<p>Now, to show that $\pi$ does depend on the ordering of the adjacency lists, we will be using Figure 22.3 as a guide.</p>
+<p>First, we note that in the given worked out procedure, we have that in the adjacency list for $w$, $t$ precedes $x$. Also, in the worked out procedure, we have that $u.\pi = t$.</p>
+<p>Now, suppose instead that we had $x$ preceding $t$ in the adjacency list of $w$. Then, it would get added to the queue before $t$, which means that it would $u$ as it's child before we have a chance to process the children of $t$. This will mean that $u.\pi = x$ in this different ordering of the adjacency list for $w$.</p>
 <h2 id="222-6">22.2-6</h2>
 <blockquote>
 <p>Give an example of a directed graph $G = (V, E)$, a source vertex $s \in V$, and a set of tree edges $E_\pi \subseteq E$ such that for each vertex $v \in V$, the unique simple path in the graph $(V, E_\pi)$ from $s$ to $v$ is a shortest path in $G$, yet the set of edges $E_\pi$ cannot be produced by running $\text{BFS}$ on $G$, no matter how the vertices are ordered in each adjacency list.</p>
@@ -5909,7 +5912,7 @@ $$</p>
 <blockquote>
 <p>There are two types of professional wrestlers: "babyfaces" ("good guys") and "heels" ("bad guys"). Between any pair of professional wrestlers, there may or may not be a rivalry. Suppose we have $n$ professional wrestlers and we have a list of $r$ pairs of wrestlers for which there are rivalries. Give an $O(n + r)$-time algorithm that determines whether it is possible to designate some of the wrestlers as babyfaces and the remainder as heels such that each rivalry is between a babyface and a heel. If it is possible to perform such a designation, your algorithm should produce it.</p>
 </blockquote>
-<p>(Removed)</p>
+<p>This problem is basically just a obfuscated version of two coloring. We will try to color the vertices of this graph of rivalries by two colors, "babyface" and "heel". To have that no two babyfaces and no two heels have a rivalry is the same as saying that the coloring is proper. To two color, we perform a breadth first search of each connected component to get the $d$ values for each vertex. Then, we give all the odd ones one color say "heel", and all the even d values a different color. We know that no other coloring will succeed where this one fails since if we gave any other coloring, we would have that a vertex $v$ has the same color as $v.\pi$ since $v$ and $v.\pi$ must have different parities for their $d$ values. Since we know that there is no better coloring, we just need to check each edge to see if this coloring is valid. If each edge works, it is possible to find a designation, if a single edge fails, then it is not possible. Since the BFS took time $O(n + r)$ and the checking took time $O(r)$, the total runtime is $O(n + r)$.</p>
 <h2 id="222-8-star">22.2-8 $\star$</h2>
 <blockquote>
 <p>The <strong><em>diameter</em></strong> of a tree $T = (V, E)$ is defined as $\max_{u,v \in V} \delta(u, v)$, that is, the largest of all shortest-path distances in the tree. Give an efficient algorithm to compute the diameter of a tree, and analyze the running time of your algorithm.</p>

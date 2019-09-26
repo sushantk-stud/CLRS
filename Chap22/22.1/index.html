@@ -5954,7 +5954,14 @@ For each vertex $u$ in the multigraph $G$, we iterably examine each vertex $v$ o
 <blockquote>
 <p>Most graph algorithms that take an adjacency-matrix representation as input require time $\Omega(V^2)$, but there are some exceptions. Show how to determine whether a directed graph $G$ contains a <strong><em>universal sink</em></strong> $-$ a vertex with $\text{in-degree}$ $|V| - 1$ and $\text{out-degree}$ $0$ $-$ in time $O(V)$, given an adjacency matrix for $G$.</p>
 </blockquote>
-<p>(Removed)</p>
+<p>Start by examining position $(1, 1)$ in the adjacency matrix. When examining position $(i, j)$, </p>
+<ul>
+<li>if a $1$ is encountered, examine position $(i + 1, j)$, and </li>
+<li>if a $0$ is encountered, examine position $(i, j + 1)$.</li>
+</ul>
+<p>Once either $i$ or $j$ is equal to $|V|$, terminate.</p>
+<p>We claim that if the graph contains a universal sink, then it must be at vertex $i$. To see this, suppose that vertex $k$ is a universal sink. Since $k$ is a universal sink, row $k$ in the adjacency matrix is all $0$'s, and column $k$ is all $1$'s except for position $(k, k)$ which is a $0$. Thus, once row $k$ is hit, the algorithm will continue to increment $j$ until $j = |V|$.</p>
+<p>To be sure that row $k$ is eventually hit, note that once column $k$ is reached, the algorithm will continue to increment $i$ until it reaches $k$. This algorithm runs in $O(V)$ and checking whether or not $i$ in fact corresponds to a sink is done in $O(V)$. Therefore, the entire process takes $O(V)$.</p>
 <h2 id="221-7">22.1-7</h2>
 <blockquote>
 <p>The <strong><em>incidence matrix</em></strong> of a directed graph $G = (V, E)$ with no self-loops is a $|V| \times |E|$ matrix $B = (b_{ij})$ such that</p>
@@ -5968,7 +5975,10 @@ b_{ij} =
 $$</p>
 <p>Describe what the entries of the matrix product $BB^\text T$ represent, where $B^\text T$ is the transpose of $B$.</p>
 </blockquote>
-<p>(Removed)</p>
+<p>We have two cases, one for the diagonal entries and one for the non-diagonal entries. The entry of $[i, i]$ for some $i$ represents the sum of the in and ourt degrees of the vertex that $i$ corresponds to. To see this, we recall that an entry in a matrix product is the dot product of row $i$ in $B$ and column $i$ in $B^\text T$. But, column $i$ in $B^\text T$ is the same as row $$ in $B$. So, we have that the entry is just row $i$ of $B$ dotted with itself, that is $\sum_{j = 1}^{|E|} b_{ij}^2$.</p>
+<p>However, since $b_{ij}$ only takes values in $\{−1, 0, 1\}$, we have that $b_{ij}^2$ only takes values in $\{0, 1\}$, taking zero if and only if $b_{i, j}$ is zero. So, the entry is the sum of all nonzero entries in row $i$ of $B$, Since each edge leaving $i$ is $−1$ and each edge going to $i$ is $1$, we are counting all the edges that either leave or enter $i$, as we wanted to show.</p>
+<p>Now, suppose that our entry is indexed by $[i, j]$ where $i \ne j$. This is the dot product of row $i$ in $B$ with column $j$ in $B^\text T$, which is row $j$ in $B$. So, the entry is equal to $\sum_{k = 1}^{|E|} b_{i, k} \cdot b_{j, k}$.</p>
+<p>Each term in this sum is $−1$ if $k$ goes between $i$ and $j$, or $0$ if it doesn't. Since we can't have that two different vertices ar both on the same side of an edge, no terms may ever be $1$. So, the entry is just $-1$ if there is an edge between $i$ and $j$, and $0$ otherwise.</p>
 <h2 id="221-8">22.1-8</h2>
 <blockquote>
 <p>Suppose that instead of a linked list, each array entry $Adj[u]$ is a hash table containing the vertices $v$ for which $(u, v) \in E$. If all edge lookups are equally likely, what is the expected time to determine whether an edge is in the graph? What disadvantages does this scheme have? Suggest an alternate data structure for each edge list that solves these problems. Does your alternative have disadvantages compared to the hash table?</p>
